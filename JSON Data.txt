@@ -1,0 +1,18 @@
+import json
+
+with open("recipes.json", "r") as f:
+    data = json.load(f)
+
+recipes = []
+for recipe in data:
+    recipes.append({
+        "cuisine": recipe.get("cuisine"),
+        "title": recipe.get("title"),
+        "rating": None if recipe.get("rating") == "NaN" else recipe.get("rating"),
+        "prep_time": None if recipe.get("prep_time") == "NaN" else recipe.get("prep_time"),
+        "cook_time": None if recipe.get("cook_time") == "NaN" else recipe.get("cook_time"),
+        "total_time": None if recipe.get("total_time") == "NaN" else recipe.get("total_time"),
+        "description": recipe.get("description"),
+        "nutrients": json.dumps(recipe.get("nutrients", {})),
+        "serves": recipe.get("serves")
+    })

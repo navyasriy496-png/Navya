@@ -1,0 +1,17 @@
+app.get("/api/recipes", async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const result = await pool.query(
+        "SELECT * FROM recipes ORDER BY rating DESC LIMIT $1 OFFSET $2",
+        [limit, offset]
+    );
+
+    res.json({
+        page,
+        limit,
+        total: result.rowCount,
+        data: result.rows
+    });
+});
