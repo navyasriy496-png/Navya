@@ -1,0 +1,26 @@
+app.get("/api/recipes/search", async (req, res) => {
+    const { title, cuisine, calories, rating, total_time } = req.query;
+    let query = "SELECT * FROM recipes WHERE 1=1";
+    let params = [];
+    let count = 1;
+
+    if (title) {
+        query += ` AND title ILIKE $${count++}`;
+        params.push(%${title}%);
+    }
+    if (cuisine) {
+        query += ` AND cuisine ILIKE $${count++}`;
+        params.push(%${cuisine}%);
+    }
+    if (rating) {
+        query += ` AND rating >= $${count++}`;
+        params.push(rating);
+    }
+    if (total_time) {
+        query += ` AND total_time <= $${count++}`;
+        params.push(total_time);
+    }
+
+    const result = await pool.query(query, params);
+    res.json({ data: result.rows });
+});
